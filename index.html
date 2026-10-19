@@ -26,7 +26,7 @@
   --ease:cubic-bezier(.22,.61,.36,1);
 }
 *{box-sizing:border-box}
-html,body{height:100%}
+html,body{height:100%;overflow:hidden}
 body{
   margin:0;background:var(--cream-2);color:var(--ink);
   font-family:'Nunito',system-ui,sans-serif;line-height:1.65;
@@ -55,7 +55,7 @@ button{font:inherit;color:inherit}
 }
 
 /* ===== DECK ===== */
-.deck{position:fixed;inset:0;z-index:2;overflow:hidden}
+.deck{position:fixed;inset:0;width:100%;height:100%;z-index:2;overflow:hidden}
 .scene{
   position:absolute;inset:0;display:grid;place-items:center;
   padding:calc(26px + env(safe-area-inset-top,0px)) 22px calc(84px + env(safe-area-inset-bottom,0px));
@@ -115,19 +115,51 @@ button{font:inherit;color:inherit}
 .parents{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.98rem;color:var(--soft)}
 
 /* oso */
-.bear-wrap{position:relative;width:min(74vw,300px);margin:2px 0 0;isolation:isolate}
-.bear-spot{
-  position:absolute;left:50%;top:54%;width:78%;aspect-ratio:1;transform:translate(-50%,-50%);
-  border-radius:50%;z-index:-1;
-  background:radial-gradient(circle,rgba(243,191,198,.5),rgba(251,237,236,0) 70%);filter:blur(16px);
+.bear-wrap{
+  position:relative;display:block;width:auto;margin:4px 0 0;isolation:isolate;
 }
+.bear-spot{
+  position:absolute;left:50%;top:62%;width:70%;aspect-ratio:1;transform:translate(-50%,-50%);
+  border-radius:50%;z-index:-1;
+  background:radial-gradient(circle,rgba(243,191,198,.42),rgba(251,237,236,0) 70%);filter:blur(16px);
+}
+.bear-drift,.bear-float,.bear-sway{display:block}
 .bear-drift{animation:bearDrift 17s ease-in-out infinite;will-change:transform}
 .bear-float{animation:bearFloat 7.4s cubic-bezier(.45,0,.55,1) infinite;will-change:transform}
-.bear-sway{animation:bearSway 11.3s ease-in-out infinite;transform-origin:50% 86%;will-change:transform}
-.bear-img{width:100%;height:auto;display:block;user-select:none;-webkit-user-drag:none}
-@keyframes bearFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.007)}}
-@keyframes bearSway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
-@keyframes bearDrift{0%,100%{transform:translateX(-3px)}50%{transform:translateX(3px)}}
+.bear-sway{animation:bearSway 9.6s ease-in-out infinite;transform-origin:50% 0;will-change:transform}
+.bear-img{
+  display:block;height:clamp(150px,31vh,290px);width:auto;max-width:none;
+  user-select:none;-webkit-user-drag:none;
+}
+@keyframes bearFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-11px) scale(1.006)}}
+@keyframes bearSway{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.2deg)}}
+@keyframes bearDrift{0%,100%{transform:translateX(-4px)}50%{transform:translateX(4px)}}
+
+/* portada: el oso sube flotando */
+.scene[data-scene="0"] .bear-wrap{
+  opacity:0;transform:translateY(26%) scale(.96);
+  transition:opacity .8s var(--ease),transform 1.2s cubic-bezier(.18,.8,.24,1);
+  transition-delay:.55s;will-change:opacity,transform;
+}
+.scene[data-scene="0"].active .bear-wrap{opacity:1;transform:none;transition-delay:.55s}
+.scene[data-scene="0"].past .bear-wrap{opacity:0;transform:translateY(-9%) scale(.99);transition-delay:0s;transition-duration:.7s}
+.scene[data-scene="0"].future .bear-wrap{opacity:0;transform:translateY(24%) scale(.96);transition-delay:0s;transition-duration:.45s}
+
+/* ===== OSITO VIAJERO · baja en globo en cada escena ===== */
+.travelling-bear{
+  position:fixed;top:0;right:clamp(-20px,1vw,32px);z-index:1;pointer-events:none;
+  width:clamp(70px,9.5vw,132px);
+  transform:translate3d(0,-26vh,0);opacity:0;
+  transition:transform 1.3s cubic-bezier(.25,.7,.3,1),opacity .9s ease;
+  will-change:transform,opacity;
+  filter:drop-shadow(0 10px 18px rgba(206,126,144,.12));
+}
+.tb-float{animation:tbFloat 6.8s ease-in-out infinite;transform-origin:50% 6%}
+.tb-float img{width:100%;height:auto;display:block;user-select:none;-webkit-user-drag:none;opacity:.88}
+@keyframes tbFloat{
+  0%,100%{transform:translateY(-5px) rotate(-1.8deg)}
+  50%{transform:translateY(6px) rotate(1.8deg)}
+}
 
 .escaping-balloon{position:absolute;left:0;top:0;width:32px;opacity:0;pointer-events:none;z-index:2}
 .escaping-balloon img{width:100%;height:auto;display:block;filter:saturate(1.25) contrast(1.04)}
@@ -330,7 +362,7 @@ button{font:inherit;color:inherit}
 /* ===== RESPONSIVE ===== */
 @media (max-height:680px){
   .eyebrow{display:none}
-  .bear-wrap{width:min(58vw,220px)}
+  .bear-img{height:clamp(120px,24vh,190px)}
   .name{font-size:clamp(3rem,13vw,4rem)}
   .rule{margin:8px 0 5px}
   .tap-hint{margin-top:6px}
@@ -365,7 +397,8 @@ button{font:inherit;color:inherit}
   .gift-note{margin-top:10px;padding:10px 0;font-size:.76rem;line-height:1.5}
   .footer-sign{margin-top:8px;font-size:.82rem}
   .eco-caption{font-size:1.2rem;bottom:9px}
-  .bear-wrap{width:min(48vw,178px)}
+  .bear-img{height:clamp(104px,20vh,150px)}
+  .travelling-bear{width:58px;right:-8px}
   .name{font-size:2.7rem}
   .title-baby{font-size:2.4rem}
   .title-shower{font-size:.92rem;letter-spacing:.4em;padding-left:.4em}
@@ -381,7 +414,7 @@ button{font:inherit;color:inherit}
   .scene{padding:26px 22px 92px}
   .title-baby{font-size:clamp(2.6rem,5vw,3.6rem)}
   .name{font-size:clamp(2.9rem,5.4vw,4rem)}
-  .bear-wrap{width:min(280px,30vh)}
+  .bear-img{height:clamp(170px,34vh,300px)}
   .count{max-width:470px}
   .details{max-width:470px}
 }
@@ -389,6 +422,8 @@ button{font:inherit;color:inherit}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
   .a,.split span{opacity:1!important;transform:none!important;filter:none!important}
+  .scene .bear-wrap{opacity:1!important;transform:none!important;transition-delay:0s!important}
+  .travelling-bear{display:none}
   .escaping-balloon{display:none}
 }
 </style>
@@ -397,6 +432,12 @@ button{font:inherit;color:inherit}
 
 <div class="wash" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+<div class="travelling-bear" id="travellingBear" aria-hidden="true">
+  <div class="tb-float">
+    <img src="assets/images/oso-globos2.png" width="704" height="988" alt="">
+  </div>
+</div>
 
 <main class="deck" id="deck">
 
@@ -424,7 +465,7 @@ button{font:inherit;color:inherit}
       <h1 class="name a" style="--d:430">Hassed</h1>
       <p class="parents a" style="--d:520">de Samy y Gaby</p>
 
-      <div class="bear-wrap a" style="--d:600">
+      <div class="bear-wrap">
         <div class="bear-spot" aria-hidden="true"></div>
         <div class="bear-drift">
           <div class="bear-float">
@@ -613,6 +654,24 @@ function paint(){
   prevBtn.disabled = current === 0;
   nextBtn.disabled = current === scenes.length - 1;
   progressBar.style.width = ((current + 1) / scenes.length * 100) + '%';
+  placeTraveller();
+}
+
+/* El osito de globos baja poco a poco con cada escena */
+const traveller = document.getElementById('travellingBear');
+const TRAV_START = -26;   // vh, arriba y oculto
+const TRAV_STEP = 25;      // vh que baja por escena
+const TRAV_MAX = 72;       // vh, límite inferior (no llega a la navegación)
+
+function placeTraveller(){
+  if (!traveller) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    traveller.style.opacity = '0';
+    return;
+  }
+  const y = Math.min(TRAV_START + current * TRAV_STEP, TRAV_MAX);
+  traveller.style.transform = 'translate3d(0,' + y + 'vh,0)';
+  traveller.style.opacity = y > -8 ? '1' : '0';
 }
 
 function goTo(index){
@@ -776,6 +835,7 @@ scheduleBalloon(5200);
 
 if (reduceMotion.addEventListener) {
   reduceMotion.addEventListener('change', () => {
+    placeTraveller();
     if (reduceMotion.matches) {
       clearTimeout(balloonTimer);
       if (escapingBalloon) escapingBalloon.getAnimations().forEach(a => a.cancel());

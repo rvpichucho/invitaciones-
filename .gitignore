@@ -1,0 +1,23 @@
+# Entornos de agentes / editores (no subir)
+.agents/
+.claude/
+.codestudio/
+skills-lock.json
+
+# Dependencias
+node_modules/
+package-lock.json
+
+# Archivos temporales y de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+tmp-*
+npx-*
+
+# Capturas y pruebas locales
+*.png.tmp
+preview-*.png
+shot-*.png
+debug-*.png
