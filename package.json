@@ -4,10 +4,7 @@
   "private": true,
   "description": "Invitación animada de Baby Shower para Hassed",
   "scripts": {
-    "start": "serve . -l tcp://0.0.0.0:${PORT:-3000}"
-  },
-  "dependencies": {
-    "serve": "^14.2.4"
+    "start": "node server.js"
   },
   "engines": {
     "node": ">=20"
