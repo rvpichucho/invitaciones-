@@ -145,20 +145,25 @@ button{font:inherit;color:inherit}
 .scene[data-scene="0"].past .bear-wrap{opacity:0;transform:translateY(-9%) scale(.99);transition-delay:0s;transition-duration:.7s}
 .scene[data-scene="0"].future .bear-wrap{opacity:0;transform:translateY(24%) scale(.96);transition-delay:0s;transition-duration:.45s}
 
-/* ===== OSITO VIAJERO · baja en globo en cada escena ===== */
+/* ===== OSITO VIAJERO · baja en globo, de fondo ===== */
 .travelling-bear{
-  position:fixed;top:0;right:clamp(-20px,1vw,32px);z-index:1;pointer-events:none;
-  width:clamp(70px,9.5vw,132px);
-  transform:translate3d(0,-26vh,0);opacity:0;
-  transition:transform 1.3s cubic-bezier(.25,.7,.3,1),opacity .9s ease;
+  position:fixed;top:0;right:clamp(-60px,-2.5vw,10px);z-index:1;pointer-events:none;
+  width:clamp(210px,56vw,600px);
+  transform:translate3d(0,-30vh,0);opacity:0;
+  transition:transform 1.4s cubic-bezier(.25,.7,.3,1),opacity 1s ease;
   will-change:transform,opacity;
-  filter:drop-shadow(0 10px 18px rgba(206,126,144,.12));
+  filter:blur(.6px) drop-shadow(0 16px 30px rgba(206,126,144,.10));
 }
 .tb-float{animation:tbFloat 6.8s ease-in-out infinite;transform-origin:50% 6%}
-.tb-float img{width:100%;height:auto;display:block;user-select:none;-webkit-user-drag:none;opacity:.88}
+.tb-float img{
+  width:100%;height:auto;display:block;user-select:none;-webkit-user-drag:none;
+  opacity:.3;
+  -webkit-mask-image:linear-gradient(180deg,#000 76%,rgba(0,0,0,.25));
+  mask-image:linear-gradient(180deg,#000 76%,rgba(0,0,0,.25));
+}
 @keyframes tbFloat{
-  0%,100%{transform:translateY(-5px) rotate(-1.8deg)}
-  50%{transform:translateY(6px) rotate(1.8deg)}
+  0%,100%{transform:translateY(-6px) rotate(-1.8deg)}
+  50%{transform:translateY(7px) rotate(1.8deg)}
 }
 
 .escaping-balloon{position:absolute;left:0;top:0;width:32px;opacity:0;pointer-events:none;z-index:2}
@@ -375,6 +380,7 @@ button{font:inherit;color:inherit}
   .place-card{padding:20px 18px;margin-top:10px}
   .gift-note{margin-top:12px;font-size:.8rem}
   .footer-sign{margin-top:10px}
+  .travelling-bear{width:clamp(230px,62vw,440px)}
 }
 @media (max-height:620px){
   .scene{padding-top:14px;padding-bottom:94px}
@@ -398,8 +404,7 @@ button{font:inherit;color:inherit}
   .footer-sign{margin-top:8px;font-size:.82rem}
   .eco-caption{font-size:1.2rem;bottom:9px}
   .bear-img{height:clamp(104px,20vh,150px)}
-  .travelling-bear{width:58px;right:-8px}
-  .name{font-size:2.7rem}
+  .travelling-bear{width:clamp(150px,40vw,280px);right:-16px}  .name{font-size:2.7rem}
   .title-baby{font-size:2.4rem}
   .title-shower{font-size:.92rem;letter-spacing:.4em;padding-left:.4em}
   .parents{font-size:.88rem}
@@ -659,9 +664,9 @@ function paint(){
 
 /* El osito de globos baja poco a poco con cada escena */
 const traveller = document.getElementById('travellingBear');
-const TRAV_START = -26;   // vh, arriba y oculto
-const TRAV_STEP = 25;      // vh que baja por escena
-const TRAV_MAX = 72;       // vh, límite inferior (no llega a la navegación)
+const TRAV_START = -18;   // vh, arriba y oculto
+const TRAV_STEP = 18;      // vh que baja por escena
+const TRAV_MAX = 56;       // vh, límite inferior (no llega a la navegación)
 
 function placeTraveller(){
   if (!traveller) return;
